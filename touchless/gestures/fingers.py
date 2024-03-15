@@ -1,4 +1,4 @@
-from src.utils.landmarks import HandLandmarkPoints
+from touchless.utils.landmarks import HandLandmarkPoints
 
 
 def two_fingers_4_8(points: HandLandmarkPoints) -> bool:
@@ -22,13 +22,13 @@ def two_fingers_4_8(points: HandLandmarkPoints) -> bool:
 
 
 def two_fingers_8_12(points: HandLandmarkPoints) -> bool:
-    """Detect if thumb and index fingers are detected (8-12 gesture).
+    """Detect if index and middle fingers are detected (8-12 gesture).
 
     Args:
         points (HandLandmarkPoints): The hand landmark points.
 
     Returns:
-        bool: True if thumb and index fingers are detected, False otherwise.
+        bool: True if index and middle fingers are detected, False otherwise.
     """
 
     return (
@@ -41,13 +41,13 @@ def two_fingers_8_12(points: HandLandmarkPoints) -> bool:
 
 
 def two_fingers_8_20(points: HandLandmarkPoints) -> bool:
-    """Detect if thumb and index fingers are detected (8-20 gesture).
+    """Detect if index and pinky fingers are detected (8-20 gesture).
 
     Args:
         points (HandLandmarkPoints): The hand landmark points.
 
     Returns:
-        bool: True if thumb and index fingers are detected, False otherwise.
+        bool: True if index and pinky fingers are detected, False otherwise.
     """
 
     return(
@@ -60,13 +60,13 @@ def two_fingers_8_20(points: HandLandmarkPoints) -> bool:
 
 
 def three_fingers_4_8_12(points: HandLandmarkPoints) -> bool:
-    """Detect if thumb, index, and middle fingers are detected (4-8-12 gesture).
+    """Detect if thumb, index and middle fingers are detected (4-8-12 gesture).
 
     Args:
         points (HandLandmarkPoints): The hand landmark points.
 
     Returns:
-        bool: True if thumb, index, and middle fingers are detected, False otherwise.
+        bool: True if thumb, index and middle fingers are detected, False otherwise.
     """
 
     return (
@@ -80,13 +80,13 @@ def three_fingers_4_8_12(points: HandLandmarkPoints) -> bool:
 
 
 def three_fingers_8_12_16(points: HandLandmarkPoints) -> bool:
-    """Detect if thumb, index, and middle fingers are detected (8-12-16 gesture).
+    """Detect if index, middle and ring fingers are detected (8-12-16 gesture).
 
     Args:
         points (HandLandmarkPoints): The hand landmark points.
 
     Returns:
-        bool: True if thumb, index, and middle fingers are detected, False otherwise.
+        bool: True if index, middle and ring fingers are detected, False otherwise.
     """
 
     return (

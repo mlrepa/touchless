@@ -1,6 +1,6 @@
-from src.gestures.fingers import two_fingers_4_8, two_fingers_8_12
-from src.utils.landmarks import HandLandmarkPoints
-from src.utils.math_utils import euclidean
+from touchless.gestures.fingers import two_fingers_4_8, two_fingers_8_12
+from touchless.utils.landmarks import HandLandmarkPoints
+from touchless.utils.math_utils import euclidean
 
 
 def click_8_12(points: HandLandmarkPoints, dist_threshold: float = 0.05) -> bool:
@@ -48,7 +48,7 @@ def click_4_6(points: HandLandmarkPoints, dist_threshold: float = 0.04) -> bool:
 
 
 def click_6_8(points: HandLandmarkPoints) -> bool:
-    """Detect if a click gesture (thumb moving upwards) is performed.
+    """Detect if a click gesture (index moving upwards) is performed.
     
     Args:
         points (HandLandmarkPoints): The hand landmark points.

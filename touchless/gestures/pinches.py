@@ -1,5 +1,5 @@
-from src.utils.landmarks import HandLandmarkPoints
-from src.utils.math_utils import euclidean
+from touchless.utils.landmarks import HandLandmarkPoints
+from touchless.utils.math_utils import euclidean
 
 
 def get_dists_for_all_fingers(points: HandLandmarkPoints) -> tuple[float, float, float, float]:

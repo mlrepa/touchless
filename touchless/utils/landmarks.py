@@ -39,39 +39,6 @@ class HandLandmarkPoints(BaseModel):
     pinky_tip: Point = Field(alias="PINKY_TIP")
 
 
-def extract_landmarks(hands_processing_results: NamedTuple) -> list[HandLandmarkPoints]:
-    """Extract landmarks for all detected hands from hands processing results.
-
-    Args:
-        hands_processing_results (NamedTuple): Hands processing results.
-
-    Returns:
-        list[HandLandmarkPoints]: List of all hand landmark points.
-    """    
-
-    multi_hand_landmarks = hands_processing_results.multi_hand_landmarks
-    all_hands_points: list[HandLandmarkPoints] = []
-
-    if multi_hand_landmarks is None:
-        return all_hands_points
-    
-    for hand_landmarks in multi_hand_landmarks:
-        
-        points: dict[str, Point] = {}
-        landmarks: RepeatedCompositeFieldContainer = hand_landmarks.landmark
-
-        for landmark_field_info in HandLandmarkPoints.model_fields.values():
-            landmark_name: str = landmark_field_info.alias
-            landmark = landmarks[getattr(HandLandmark, landmark_name).value]
-            point: Point = Point(x=landmark.x, y=landmark.y, z=landmark.z)
-            points[landmark_name] = point
-
-        points_container: HandLandmarkPoints = HandLandmarkPoints(**points)
-        all_hands_points.append(points_container)
-
-    return all_hands_points
-
-
 def get_pointer(points: HandLandmarkPoints | None, img_size: tuple[int, int]) -> tuple[int, int] | None:
     """Get pointer - coordinates of the index finger TIP.
 
