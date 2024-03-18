@@ -29,7 +29,7 @@ if __name__ == "__main__":
         if frame is not None:
 
             # Create hand instances
-            right_hand= Hand(type=HandType.RIGHT)
+            right_hand = Hand(type=HandType.RIGHT)
             left_hand = Hand(type=HandType.LEFT)
 
             hands: list[Hand] = [right_hand, left_hand]
