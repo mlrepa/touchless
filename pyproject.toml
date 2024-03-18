@@ -28,7 +28,7 @@ dependencies = [
     "jupyter==1.0.0",
     "kiwisolver==1.4.5",
     "matplotlib==3.8.2",
-    "mediapipe==0.10.9",
+    "mediapipe==0.10.11",
     "numpy==1.26.3",
     "opencv-python==4.9.0.80",
     "opencv-contrib-python==4.9.0.80",
