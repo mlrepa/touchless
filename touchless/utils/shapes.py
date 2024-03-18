@@ -3,7 +3,7 @@ from collections.abc import Callable
 import cv2
 import numpy as np
 
-from src.utils.events import is_shape_selected
+from touchless.utils.events import is_shape_selected
 
 
 SHAPES: list[dict] = [

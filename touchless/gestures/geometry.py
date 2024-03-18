@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-from src.utils.math_utils import euclidean, angle_between_vectors
-from src.utils.landmarks import HandLandmarkPoints
+from touchless.utils.math_utils import euclidean, angle_between_vectors
+from touchless.utils.landmarks import HandLandmarkPoints
 
 
 def change_magnitude(

@@ -1,4 +1,4 @@
-from src.utils.landmarks import HandLandmarkPoints
+from touchless.utils.landmarks import HandLandmarkPoints
 
 
 def fist_closed(points: HandLandmarkPoints) -> bool:
