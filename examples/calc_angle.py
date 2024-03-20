@@ -3,7 +3,7 @@ import argparse
 import cv2
 
 from touchless.camera import Camera
-from touchless.hands import HandType, Hand, HandTrackingProvider
+from touchless.hands import HandsProvider
 from touchless.gestures.geometry import vertical_angle
 from touchless.utils.landmarks import get_pointer
 from touchless.utils.shapes import draw_pointer, draw_angle_vertex, draw_vertical, draw_angle
@@ -25,8 +25,8 @@ def main(v_x: int | None = None, v_y: int | None = None):
     v_y = v_y if v_y is not None else 0
     VERTEX: tuple[int, int] = (v_x, v_y)
     
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider()
 
     while cam.is_active:
 
@@ -34,15 +34,12 @@ def main(v_x: int | None = None, v_y: int | None = None):
 
         if frame is not None:
 
-            right_hand: Hand = Hand(type=HandType.RIGHT)
-            hand_tracking_provider.update(frame, right_hand)
-
+            hands_provider.update(frame)
             angle: float | None = None
+            pointer: tuple[int, int] | None = get_pointer(hands_provider.right_hand.data.keypoints, FRAME_SIZE)
 
             draw_angle_vertex(frame, VERTEX)
             draw_vertical(frame, VERTEX, FRAME_HEIGHT)
-
-            pointer: tuple[int, int] | None = get_pointer(right_hand.data.keypoints, FRAME_SIZE)
             draw_pointer(frame, pointer)
 
             if pointer is not None:

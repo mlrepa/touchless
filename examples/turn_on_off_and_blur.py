@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 from touchless.camera import Camera
-from touchless.hands import HandType, Hand, HandTrackingProvider, GestureProvider
+from touchless.hands import HandsProvider
 
 
 def main():
@@ -14,15 +14,13 @@ def main():
     cam: Camera = Camera()
     cv2.namedWindow("main_window", cv2.WINDOW_GUI_NORMAL)
     
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
-    gesture_provider: GestureProvider = GestureProvider()
-
     # Define required gestures to detect
     required_gestures: list[str] = [
         "hand_up", "hand_down",
         "two_fingers_index_middle", "three_fingers_index_middle_ring"
     ]
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider(right_hand_gestures=required_gestures)
 
     while cam.is_active:
 
@@ -30,14 +28,12 @@ def main():
 
         if frame is not None:
 
-            right_hand: Hand = Hand(type=HandType.RIGHT, required_gestures=required_gestures)
-            hand_tracking_provider.update(frame, right_hand)
-            gesture_provider.detect_gestures(right_hand)
+            hands_provider.update(frame, right_hand_gestures=True)
 
             # Create frame with a black img
             stopped_img: np.ndarray = np.zeros([100, 100, 3], dtype=np.uint8)
 
-            for gesture in right_hand.gestures:
+            for gesture in hands_provider.right_hand.gestures:
 
                 # Check if hand is inverted or down
                 if gesture.name == "hand_down" and gesture.data.is_detected:

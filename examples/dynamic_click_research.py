@@ -15,12 +15,14 @@ Additional thoughts & ideas:
 - detect click on arbitrary frames series, maybe detect how many times it was and get frames subseries with clicks
 """
 
+import os
+from pathlib import Path
 import time
 
 import cv2
 
 from touchless.camera import Camera
-from touchless.hands import HandType, Hand, HandTrackingProvider
+from touchless.hands import HandsProvider
 from touchless.utils.landmarks import (
     HandLandmarkPoints,
     Point,
@@ -50,6 +52,9 @@ def get_pointer3d_normalized(points: HandLandmarkPoints | None) -> tuple[float, 
 
 def main():
 
+    LOGS_DIR: str = Path("logs")
+    os.makedirs(LOGS_DIR, exist_ok=True)
+
     cam: Camera = Camera()
 
     FRAME_WIDTH: int = cam.resolution.width
@@ -60,14 +65,14 @@ def main():
     CV_WIN_NAME: str = "window"
     cv2.namedWindow(CV_WIN_NAME, cv2.WINDOW_GUI_NORMAL)
 
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider()
 
     check_every: int = 20
     frame_cnt: int = 0
 
-    coord_deltas_log = open(f"logs/coord_deltas_{check_every}.txt", "w")
-    coord_log = open(f"logs/coords_{int(time.time())}.txt", "w")
+    coord_deltas_log = open(LOGS_DIR / f"coord_deltas_{check_every}.txt", "w")
+    coord_log = open(LOGS_DIR / f"coords_{int(time.time())}.txt", "w")
 
     while cam.is_active:
 
@@ -75,9 +80,8 @@ def main():
 
         if frame is not None:
 
-            right_hand: Hand = Hand(type=HandType.RIGHT)
-            hand_tracking_provider.update(frame, right_hand)
-            keypoints: HandLandmarkPoints | None = right_hand.data.keypoints
+            hands_provider.update(frame)
+            keypoints: HandLandmarkPoints | None = hands_provider.right_hand.data.keypoints
             pointer: tuple[int, int] | None = get_pointer(keypoints, FRAME_SIZE)
             pointer3d: tuple[float, float, float] | None = get_pointer3d_normalized(keypoints)
             draw_pointer(frame, pointer)

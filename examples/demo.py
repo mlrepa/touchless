@@ -1,7 +1,7 @@
 import cv2
 
 from touchless.camera import Camera
-from touchless.hands import HandType, Hand, HandTrackingProvider, GestureProvider
+from touchless.hands import HandsProvider
 import touchless.gestures as gestures
 from touchless.utils.landmarks import HandLandmarkPoints
 
@@ -28,9 +28,8 @@ def main():
     CV_WIN_NAME: str = "window"
     cv2.namedWindow(CV_WIN_NAME, cv2.WINDOW_GUI_NORMAL)
     
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
-    gesture_provider: GestureProvider = GestureProvider()
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider()
 
     while cam.is_active:
 
@@ -38,8 +37,7 @@ def main():
 
         if frame is not None:
 
-            right_hand: Hand = Hand(type=HandType.RIGHT)
-            hand_tracking_provider.update(frame, right_hand)
+            hands_provider.update(frame, right_hand_gestures=True)
 
             # ROI (rectangle) where change magnitude (volume) is detected
             cv2.rectangle(frame, pt1=CHANGE_MAGNITUDE_ROI[0], pt2=CHANGE_MAGNITUDE_ROI[1], color=(0, 0, 255), thickness=2)
@@ -51,7 +49,7 @@ def main():
                 thickness=1
             )
 
-            keypoints: HandLandmarkPoints | None = right_hand.data.keypoints
+            keypoints: HandLandmarkPoints | None = hands_provider.right_hand.data.keypoints
 
             cv2.putText(
                 frame,
@@ -87,8 +85,7 @@ def main():
                     )
 
                 else:
-                    gesture_provider.detect_gestures(right_hand)
-                    for gesture in right_hand.gestures:
+                    for gesture in hands_provider.right_hand.gestures:
                         if gesture.data.is_detected:
                             # Display gesture name
                             cv2.putText(

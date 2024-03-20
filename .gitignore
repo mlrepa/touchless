@@ -166,7 +166,7 @@ cython_debug/
 pdm.lock
 
 # Project
-/logs/*
+/logs
 /experiments/*
 
 # VSCode
