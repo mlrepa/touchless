@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from touchless.hands import HandType, Hand, HandTrackingProvider, GestureProvider
+from touchless.hands import Hand, HandsProvider
 from touchless.camera import Camera
 
 
@@ -18,9 +18,8 @@ if __name__ == "__main__":
     CV_WIN_NAME: str = "window"
     cv2.namedWindow(CV_WIN_NAME, cv2.WINDOW_GUI_NORMAL)
 
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
-    gesture_provider: GestureProvider = GestureProvider()
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider()
 
     while cam.is_active:
 
@@ -28,16 +27,9 @@ if __name__ == "__main__":
 
         if frame is not None:
 
-            # Create hand instances
-            right_hand = Hand(type=HandType.RIGHT)
-            left_hand = Hand(type=HandType.LEFT)
-
-            hands: list[Hand] = [right_hand, left_hand]
-
-            hand_tracking_provider.update(frame, right_hand, left_hand)
-            gesture_provider.detect_gestures(right_hand, left_hand)
-
             cv2.rectangle(frame, (0, 0), (FRAME_WIDTH, 100), color=(255, 255, 255), thickness=-1)
+            hands_provider.update(frame, right_hand_gestures=True, left_hand_gestures=True)
+            hands: list[Hand] = [hands_provider.right_hand, hands_provider.left_hand]
 
             for i, hand in enumerate(hands):
                 

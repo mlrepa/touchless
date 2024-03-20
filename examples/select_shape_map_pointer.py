@@ -2,7 +2,7 @@ import math
 import cv2
 
 from touchless.camera import Camera
-from touchless.hands import HandType, Hand, HandTrackingProvider
+from touchless.hands import HandsProvider
 from touchless.utils.landmarks import HandLandmarkPoints, get_pointer
 from touchless.utils.shapes import SHAPES, draw_pointer, render_shapes
 
@@ -19,8 +19,8 @@ def main():
     CV_WIN_NAME: str = "window"
     cv2.namedWindow(CV_WIN_NAME, cv2.WINDOW_GUI_NORMAL)
 
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider()
 
     # Control ROI is a square with a given side
     #####################################################
@@ -49,10 +49,7 @@ def main():
 
         if frame is not None:
 
-            right_hand: Hand = Hand(type=HandType.RIGHT)
-            hand_tracking_provider.update(frame, right_hand)
-            keypoints: HandLandmarkPoints | None = right_hand.data.keypoints
-
+            # Draw control ROI (virtual touchpad rectangle) 
             cv2.rectangle(
                 frame,
                 pt1=CONTROL_ROI[0],
@@ -61,8 +58,11 @@ def main():
                 thickness=2
             )
 
+            hands_provider.update(frame)
+            keypoints: HandLandmarkPoints | None = hands_provider.right_hand.data.keypoints
             pointer: tuple[int, int] | None = get_pointer(keypoints, FRAME_SIZE)
             mapped_pointer: tuple[int, int] | None = None
+
             if (
                 pointer is not None and
                 (CONTROL_ROI[0][0] <= pointer[0] <= CONTROL_ROI[1][0]) and

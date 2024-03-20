@@ -1,7 +1,7 @@
 import cv2
 
 from touchless.camera import Camera
-from touchless.hands import HandType, Hand, HandTrackingProvider
+from touchless.hands import HandsProvider
 from touchless.utils.landmarks import HandLandmarkPoints, get_pointer
 from touchless.utils.shapes import SHAPES, draw_pointer, render_shapes
 
@@ -18,8 +18,8 @@ def main():
     CV_WIN_NAME: str = "window"    
     cv2.namedWindow(CV_WIN_NAME, cv2.WINDOW_GUI_NORMAL)
     
-    # Create providers
-    hand_tracking_provider: HandTrackingProvider = HandTrackingProvider()
+    # Create hands provider
+    hands_provider: HandsProvider = HandsProvider()
 
     while cam.is_active:
 
@@ -27,10 +27,10 @@ def main():
 
         if frame is not None:
 
-            right_hand: Hand = Hand(type=HandType.RIGHT)
-            hand_tracking_provider.update(frame, right_hand)
-            keypoints: HandLandmarkPoints | None = right_hand.data.keypoints
+            hands_provider.update(frame)
+            keypoints: HandLandmarkPoints | None = hands_provider.right_hand.data.keypoints
             pointer: tuple[int, int] | None = get_pointer(keypoints, FRAME_SIZE)
+
             draw_pointer(frame, pointer)
             render_shapes(frame, SHAPES, pointer)
 
