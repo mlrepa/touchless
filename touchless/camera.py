@@ -62,17 +62,11 @@ class Camera:
             return None
         
         status, frame = self._cap.read()
+        if status and self._flip:
+            frame = cv2.flip(frame, 1)
 
-        if status:
+        return frame
 
-            if self._flip:
-                frame = cv2.flip(frame, 1)
-            return frame
-        else:
-            self._release()
-            self._release_status = "Stop on frame read error."
-            return None
-        
     @property
     def is_active(self) -> bool:
         """Checks if the camera is active.
